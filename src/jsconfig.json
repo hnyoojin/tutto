@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src"
+  },
+  "include": ["src"]
+}
+
+// import시, 상대경로 작업을 절대경로로 바꾸기 위한 작업
