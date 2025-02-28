@@ -1,22 +1,22 @@
-const ProgressTiles = ({
+//진행도를 타일로 보여주는 역할
+const ProgressTile = ({
   total = 30,
-  completed,
+  completed = 0,
   tileColor = "#ffffff",
   progressColor = "#4ade80",
 }) => {
-  // ProgressTiles.js
   const styles = {
     container: {
-      width: "210px", // 카드 padding 고려해서 줄임
+      width: "210px",
       display: "grid",
-      gridTemplateColumns: "repeat(10, 1fr)",
+      gridTemplateColumns: "repeat(10,1fr)",
       gap: "3px",
-      margin: "0 auto", // padding 제거
+      margin: "0 auto",
     },
     tile: {
-      width: "18px", // 타일 크기도 살짝 줄임
+      width: "18px",
       height: "18px",
-      borderRadius: "3px",
+      borderRadius: "4px",
     },
   };
 
@@ -35,4 +35,4 @@ const ProgressTiles = ({
   );
 };
 
-export default ProgressTiles;
+export default ProgressTile;

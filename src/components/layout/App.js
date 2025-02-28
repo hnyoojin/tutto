@@ -1,15 +1,26 @@
 // src/components/layout/App.js
+import React, { useState } from "react";
 import EventCard from "../event/EventCard";
-import { useState } from "react";
+import EventCreator from "../event/EventCreator";
 
 const App = () => {
-  // 테스트용 더미 데이터
-  const sampleEvent = {
-    title: "프로젝트 진행률",
-    style: {
-      tileColor: "#ffffff",
-      progressColor: "#4ade80",
+  // 샘플 이벤트 데이터
+  const [events, setEvents] = useState([
+    {
+      title: "프로젝트 완료하기",
+      startDate: "2024-02-01",
+      endDate: "2024-02-29",
+      type: "countdown",
+      style: {
+        tileColor: "#ffffff",
+        progressColor: "#4ade80",
+      },
     },
+  ]);
+
+  // 새 이벤트 추가 함수
+  const addEvent = (newEvent) => {
+    setEvents([...events, newEvent]);
   };
 
   const styles = {
@@ -17,16 +28,36 @@ const App = () => {
       minHeight: "100vh",
       backgroundColor: "#121212",
       padding: "20px",
-      // 중앙 정렬을 위한 flexbox 추가
       display: "flex",
-      justifyContent: "center", // 가로 중앙 정렬
-      alignItems: "center", // 세로 중앙 정렬
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "20px",
+    },
+    title: {
+      color: "#ffffff",
+      marginBottom: "20px",
+    },
+    eventList: {
+      display: "flex",
+      flexWrap: "wrap",
+      gap: "20px",
+      justifyContent: "center",
     },
   };
 
   return (
     <div style={styles.container}>
-      <EventCard event={sampleEvent} />
+      <h1 style={styles.title}>이벤트 타이머</h1>
+
+      {/* 이벤트 생성 폼 */}
+      <EventCreator addEvent={addEvent} />
+
+      {/* 이벤트 목록 */}
+      <div style={styles.eventList}>
+        {events.map((event, index) => (
+          <EventCard key={index} event={event} />
+        ))}
+      </div>
     </div>
   );
 };
