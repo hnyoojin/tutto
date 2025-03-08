@@ -1,3 +1,5 @@
+// 원래는 로그인에서 시작하려고 했어서 AppRouter를 만들어뒀는데,당장 사용하지는 않습니다.
+/*
 import React from "react";
 import {
   HashRouter as Router,
@@ -39,3 +41,4 @@ const AppRouter = ({ refreshUser, userObj }) => {
 };
 
 export default AppRouter;
+*/

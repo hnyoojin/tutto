@@ -5,7 +5,7 @@ import {
   calculateProgress,
 } from "../../utils/dateUtils";
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, onDelete }) => {
   const styles = {
     card: {
       width: "250px",
@@ -37,6 +37,11 @@ const EventCard = ({ event }) => {
         tileColor={event.style.tileColor}
         progressColor={event.style.progressColor}
       />
+      <div style={{ padding: "7px" }} />
+      {/* 삭제 버튼 추가 */}
+      <button onClick={() => onDelete(event.id)} style={styles.deleteButton}>
+        삭제
+      </button>
     </div>
   );
 };

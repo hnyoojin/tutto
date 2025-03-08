@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const EventCreator = () => {
+const EventCreator = ({ addEvent }) => {
   const [title, setTitle] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -40,6 +40,8 @@ const EventCreator = () => {
       createdAt: new Date().toISOString(),
     };
 
+    // addEvent 함수 호출하여 부모 컴포넌트로 전달
+    addEvent(newEvent);
     // Firebase에 저장하는 코드를 나중에 구현할 예정입니다.
     // saveEventToFirebase(newEvent);
     toast.success("Event Submitted Succesfully!");
@@ -52,8 +54,13 @@ const EventCreator = () => {
     setProgressColor("#4ade80");
   };
 
+  const styles = {
+    container: {
+      padding: "1px",
+    },
+  };
   return (
-    <>
+    <div style={styles.container}>
       <form onSubmit={handleSubmit}>
         <div className="event-title-input">
           <input
@@ -63,15 +70,18 @@ const EventCreator = () => {
             placeholder="Event title"
           />
         </div>
-        <div className="date-input">
-          <label>Start Date</label>
+        <div className="start-date-input">
+          <label style={{ paddingRight: "5px" }}>Start Date</label>
           <input
             type="date"
             value={startDate}
             onChange={(event) => setStartDate(event.target.value)}
             placeholder=""
           />
-          <label>End Date</label>
+        </div>
+        <div className="end-date-input">
+          {" "}
+          <label style={{ paddingRight: "5px" }}>End Date</label>
           <input
             type="date"
             value={endDate}
@@ -110,7 +120,7 @@ const EventCreator = () => {
         </div>
       </form>
       <ToastContainer position="top-center" />
-    </>
+    </div>
   );
 };
 
