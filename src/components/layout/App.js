@@ -15,6 +15,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showEventForm, setShowEventForm] = useState(false);
 
   // 사용자 인증 상태
   useEffect(() => {
@@ -54,8 +55,15 @@ const App = () => {
   // 새 이벤트 추가 함수
   const addEvent = async (newEvent) => {
     try {
-      // Firebase에 이벤트 추가
-      const savedEvent = await addEventToFirebase(newEvent);
+      // 현재 로그인한 사용자의 ID 추가
+      const user = authService.currentUser;
+      const eventWithUserId = {
+        ...newEvent,
+        userId: user.uid, // 이 부분 추가
+      };
+
+      // Firebase에 이벤트 추가 (수정된 이벤트 객체 전달)
+      const savedEvent = await addEventToFirebase(eventWithUserId);
       // 로컬 상태 업데이트
       setEvents([savedEvent, ...events]);
       return true;
@@ -78,6 +86,15 @@ const App = () => {
       console.error("Error deleting event:", error);
       toast.error("이벤트 삭제 중 오류가 발생했습니다.");
     }
+  };
+
+  // 이벤트 생성 핸들러
+  const handleCreateEvent = () => {
+    setShowEventForm(!showEventForm);
+  };
+
+  const handleCloseForm = () => {
+    setShowEventForm(false);
   };
 
   // 로그아웃 핸들러
@@ -130,25 +147,35 @@ const App = () => {
     content = (
       <>
         <ToastContainer />
+
+        {/* user name */}
+        <p style={{ color: "white" }}>User : {user.email}</p>
+
         {/* 이벤트 생성 폼 */}
-        <EventCreator addEvent={addEvent} />
+        {showEventForm ? (
+          <EventCreator addEvent={addEvent} onClose={handleCloseForm} />
+        ) : (
+          <button onClick={handleCreateEvent}>Create New Event</button>
+        )}
 
         {/* 로딩 상태 표시 */}
         {loading ? (
-          <p style={{ color: "white" }}>이벤트 불러오는 중...</p>
+          <p style={{ color: "white" }}>Loading...</p>
         ) : (
-          /* 이벤트 목록 */
           <div style={styles.eventList}>
-            {events.length === 0 ? (
-              <p style={{ color: "white" }}>등록된 이벤트가 없습니다.</p>
+            {events.filter((event) => event.userId === user.uid).length ===
+            0 ? (
+              <p style={{ color: "white" }}>No Events on List</p>
             ) : (
-              events.map((event) => (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                  onDelete={deleteEvent}
-                />
-              ))
+              events
+                .filter((event) => event.userId === user.uid)
+                .map((event) => (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    onDelete={deleteEvent}
+                  />
+                ))
             )}
           </div>
         )}
@@ -162,14 +189,14 @@ const App = () => {
   else {
     content = (
       <>
-        <p style={{ color: "white" }}>서비스를 이용하려면 로그인하세요.</p>
+        <p style={{ color: "white" }}>Sign in to use the Services</p>
         <AuthForm />
       </>
     );
   }
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>이벤트 타이머</h1>
+      <h1 style={styles.title}>Tutto</h1>
       {content}
     </div>
   );

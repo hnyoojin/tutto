@@ -12,28 +12,24 @@ const AuthForm = () => {
 
     try {
       if (signMode === "SignIn") {
-        // 로그인 함수 호출
         await signInPage(userEmail, userPassword);
       } else if (signMode === "SignUp") {
-        // 회원가입 함수 호출
         await signUpPage(userEmail, userPassword);
       }
     } catch (error) {
       switch (error.code) {
         case "auth/too-many-requests":
-          let remainingTime = 100; // 기본 대기 시간
+          let remainingTime = 100;
 
           const toastId = toast.info(
             `잠시 후 다시 시도해주세요. ${remainingTime}초 남았습니다.`,
             { autoClose: false }
           );
-
           const intervalId = setInterval(() => {
             remainingTime--;
-
             if (remainingTime > 0) {
               toast.update(toastId, {
-                render: `잠시 후 다시 시도해주세요. ${remainingTime}초 남았습니다.`,
+                render: `Please try again later. ${remainingTime}s left.`,
                 type: "info",
               });
             } else {
@@ -43,18 +39,19 @@ const AuthForm = () => {
           }, 1000);
           break;
         default:
-          toast.error("이메일이나 비밀번호를 다시 확인해주세요.");
+          toast.error("Chect your Email/Password.");
       }
     }
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <ToastContainer />
       <div>
-        <h2>{signMode === "SignIn" ? "로그인" : "회원가입"}</h2>
+        <h2>{signMode === "SignIn" ? "Sign In" : "Sign Up"}</h2>
 
         <div>
-          <label>이메일</label>
+          <label>Email</label>
           <input
             type="email"
             value={userEmail}
@@ -64,7 +61,7 @@ const AuthForm = () => {
         </div>
 
         <div>
-          <label>비밀번호</label>
+          <label>Password</label>
           <input
             type="password"
             value={userPassword}
@@ -74,22 +71,22 @@ const AuthForm = () => {
         </div>
 
         <button type="submit">
-          {signMode === "SignIn" ? "로그인" : "회원가입"}
+          {signMode === "SignIn" ? "Sign In" : "Sign Up"}
         </button>
 
         <div>
           {signMode === "SignIn" ? (
             <p>
-              계정이 없으신가요?
+              Don't have an account?
               <button type="button" onClick={() => setSignMode("SignUp")}>
-                회원가입
+                Sign Up
               </button>
             </p>
           ) : (
             <p>
-              이미 계정이 있으신가요?
+              Already have an account?
               <button type="button" onClick={() => setSignMode("SignIn")}>
-                로그인
+                Sign In
               </button>
             </p>
           )}

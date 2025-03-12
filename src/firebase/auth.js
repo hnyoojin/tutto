@@ -16,7 +16,7 @@ export const signUpPage = async (userEmail, userPassword) => {
     console.log(userCredential);
     return userCredential.user;
   } catch (error) {
-    console.error("회원가입 에러: ", error);
+    console.error("Sign Up Error : ", error);
     throw error;
   }
 };
@@ -32,7 +32,7 @@ export const signInPage = async (userEmail, userPassword) => {
     console.log(userCredential);
     return userCredential.user;
   } catch (error) {
-    console.error("로그인 에러: ", error);
+    console.error("Sign In Error : ", error);
     throw error;
   }
 };
@@ -43,7 +43,7 @@ export const signOutPage = async () => {
     await signOut(auth);
     return true;
   } catch (error) {
-    console.error("로그아웃 에러: ", error);
+    console.error("Sign Out Error : ", error);
     throw error;
   }
 };
