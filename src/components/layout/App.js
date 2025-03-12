@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import EventCard from "../event/EventCard";
 import EventCreator from "../event/EventCreator";
+import AuthForm from "../auth/AuthForm";
+import { signOutPage } from "../../firebase/auth";
+import { authService, onAuthStateChanged } from "../../firebase";
 import {
   getEvents,
   addEvent as addEventToFirebase,
@@ -9,8 +12,27 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 
 const App = () => {
+  const [user, setUser] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // 사용자 인증 상태
+  useEffect(() => {
+    // mount : 인증 상태 변화 감지 리스너
+    setLoading(true);
+    try {
+      const unsubscribe = onAuthStateChanged(authService, (currentUser) => {
+        setUser(currentUser);
+        setLoading(false);
+      });
+
+      // unmount : 리스너 제거
+      return () => unsubscribe();
+    } catch (error) {
+      console.error("사용자 인증 에러 : ", error);
+      setLoading(false);
+    }
+  }, []);
 
   // Firebase에서 이벤트 목록 불러오기
   useEffect(() => {
@@ -57,6 +79,18 @@ const App = () => {
       toast.error("이벤트 삭제 중 오류가 발생했습니다.");
     }
   };
+
+  // 로그아웃 핸들러
+  const handleSignOut = async () => {
+    try {
+      await signOutPage();
+      toast.success("성공적으로 로그아웃 되었습니다.");
+    } catch (error) {
+      console.error("로그아웃 에러:", error);
+      toast.error("로그아웃 중 오류가 발생하였습니다.");
+    }
+  };
+
   // 이하 스타일 및 렌더링 부분은 기존과 동일
   const styles = {
     /* ... 기존 스타일 ... */
@@ -84,28 +118,59 @@ const App = () => {
     },
   };
 
+  let content;
+
+  // 로딩 중
+  if (loading) {
+    content = <p style={{ color: "white" }}>로딩 중...</p>;
+  }
+
+  // 인증된 유저 (로그인 됨)
+  else if (user) {
+    content = (
+      <>
+        <ToastContainer />
+        {/* 이벤트 생성 폼 */}
+        <EventCreator addEvent={addEvent} />
+
+        {/* 로딩 상태 표시 */}
+        {loading ? (
+          <p style={{ color: "white" }}>이벤트 불러오는 중...</p>
+        ) : (
+          /* 이벤트 목록 */
+          <div style={styles.eventList}>
+            {events.length === 0 ? (
+              <p style={{ color: "white" }}>등록된 이벤트가 없습니다.</p>
+            ) : (
+              events.map((event) => (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  onDelete={deleteEvent}
+                />
+              ))
+            )}
+          </div>
+        )}
+
+        {/* 로그아웃 버튼 */}
+        <button onClick={() => handleSignOut()}>Sign Out</button>
+      </>
+    );
+  }
+  // 인증된 사용자가 아닌 경우 (로그인 되지 않은 경우)
+  else {
+    content = (
+      <>
+        <p style={{ color: "white" }}>서비스를 이용하려면 로그인하세요.</p>
+        <AuthForm />
+      </>
+    );
+  }
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>이벤트 타이머</h1>
-
-      {/* 이벤트 생성 폼 */}
-      <EventCreator addEvent={addEvent} />
-
-      {/* 로딩 상태 표시 */}
-      {loading ? (
-        <p style={{ color: "white" }}>이벤트 불러오는 중...</p>
-      ) : (
-        /* 이벤트 목록 */
-        <div style={styles.eventList}>
-          {events.length === 0 ? (
-            <p style={{ color: "white" }}>등록된 이벤트가 없습니다.</p>
-          ) : (
-            events.map((event) => (
-              <EventCard key={event.id} event={event} onDelete={deleteEvent} />
-            ))
-          )}
-        </div>
-      )}
+      {content}
     </div>
   );
 };

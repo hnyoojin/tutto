@@ -1,14 +1,15 @@
-import * as firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import {
+  getAuth,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -23,7 +24,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-export const firebaseInstance = firebase; // 소셜로그인
-export const authService = firebase.auth(); // 로그인 모듈
-export const dbService = firebase.firestore(); // NoSQL 데이터베이스
-export const storageService = firebase.storage(); // 이미지 저장 스토리지
+// Services
+const authService = getAuth(app);
+const dbService = getFirestore(app);
+const storageService = getStorage(app);
+
+export {
+  app,
+  analytics,
+  authService,
+  dbService,
+  storageService,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+};
