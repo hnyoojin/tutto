@@ -108,13 +108,9 @@ const App = () => {
     }
   };
 
-  // 이하 스타일 및 렌더링 부분은 기존과 동일
   const styles = {
-    /* ... 기존 스타일 ... */
     container: {
       fontFamily: "'Poppins', sans-serif",
-      fontWeight: "400",
-      fontStyle: "normal",
       minHeight: "100vh",
       backgroundColor: "#1e2426",
       padding: "20px",
@@ -125,13 +121,49 @@ const App = () => {
     },
     title: {
       color: "#ffffff",
+      fontSize: "2.5rem",
       marginBottom: "20px",
+      fontWeight: "bold",
+    },
+    userInfo: {
+      color: "#a0a0a0",
+      fontSize: "16px",
+      marginBottom: "10px",
+    },
+    signOutButton: {
+      padding: "10px 20px",
+      backgroundColor: "#4a90e2",
+      color: "white",
+      border: "none",
+      borderRadius: "8px",
+      cursor: "pointer",
+      transition: "background-color 0.3s ease",
+    },
+    signOutButtonHover: {
+      backgroundColor: "#357abd",
+    },
+    loadingText: {
+      color: "white",
+      fontSize: "18px",
+    },
+    noEventsText: {
+      color: "white",
+      fontSize: "16px",
+      textAlign: "center",
     },
     eventList: {
       display: "flex",
       flexWrap: "wrap",
       gap: "20px",
       justifyContent: "center",
+      width: "100%",
+      maxWidth: "1200px",
+    },
+    signInPrompt: {
+      color: "white",
+      fontSize: "18px",
+      marginBottom: "20px",
+      textAlign: "center",
     },
   };
 

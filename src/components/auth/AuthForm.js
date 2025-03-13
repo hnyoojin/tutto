@@ -48,10 +48,12 @@ const AuthForm = () => {
     <form onSubmit={handleSubmit}>
       <ToastContainer />
       <div>
-        <h2>{signMode === "SignIn" ? "Sign In" : "Sign Up"}</h2>
+        <h2 style={{ color: "white" }}>
+          {signMode === "SignIn" ? "Sign In" : "Sign Up"}
+        </h2>
 
-        <div>
-          <label>Email</label>
+        <div style={{ paddingBottom: "5px" }}>
+          <label style={{ color: "white", paddingRight: "5px" }}>Email</label>
           <input
             type="email"
             value={userEmail}
@@ -60,8 +62,10 @@ const AuthForm = () => {
           />
         </div>
 
-        <div>
-          <label>Password</label>
+        <div style={{ paddingBottom: "5px" }}>
+          <label style={{ color: "white", paddingRight: "5px" }}>
+            Password
+          </label>
           <input
             type="password"
             value={userPassword}
@@ -76,14 +80,14 @@ const AuthForm = () => {
 
         <div>
           {signMode === "SignIn" ? (
-            <p>
+            <p style={{ color: "white" }}>
               Don't have an account?
               <button type="button" onClick={() => setSignMode("SignUp")}>
                 Sign Up
               </button>
             </p>
           ) : (
-            <p>
+            <p style={{ color: "white" }}>
               Already have an account?
               <button type="button" onClick={() => setSignMode("SignIn")}>
                 Sign In
