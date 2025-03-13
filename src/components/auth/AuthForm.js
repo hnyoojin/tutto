@@ -53,7 +53,7 @@ const AuthForm = () => {
         </h2>
 
         <div style={{ paddingBottom: "5px" }}>
-          <label style={{ color: "white", paddingRight: "5px" }}>Email</label>
+          <label style={{ color: "white", paddingRight: "35px" }}>Email</label>
           <input
             type="email"
             value={userEmail}
